@@ -13,7 +13,7 @@ export const getOneJob = async (req, res) => {
 
   const job = await Job.findById(id);
 
-  if (!job) throw new NotFoundError(`No job with id ${id}`);
+  if (!job) throw new NotFoundError(`no job with id ${id}`);
 
   res.status(StatusCodes.CREATED).json({ job });
 };
@@ -22,7 +22,7 @@ export const createJob = async (req, res) => {
   const { company, position } = req.body;
 
   if (!company || !position)
-    throw new BadRequestError("Please provide company and position");
+    throw new BadRequestError("please provide company and position");
 
   const job = await Job.create({ company, position });
 
@@ -36,9 +36,9 @@ export const updateJob = async (req, res) => {
     new: true,
   });
 
-  if (!updatedJob) throw new NotFoundError(`No job with id ${id}`);
+  if (!updatedJob) throw new NotFoundError(`no job with id ${id}`);
 
-  res.status(StatusCodes.OK).json({ msg: "Job updated", job: updatedJob });
+  res.status(StatusCodes.OK).json({ msg: "job updated", job: updatedJob });
 };
 
 export const deleteJob = async (req, res) => {
@@ -46,7 +46,7 @@ export const deleteJob = async (req, res) => {
 
   const deletedJob = await Job.findByIdAndDelete(id);
 
-  if (!deletedJob) throw new NotFoundError(`No job with id ${id}`);
+  if (!deletedJob) throw new NotFoundError(`no job with id ${id}`);
 
-  res.status(StatusCodes.OK).json({ msg: "Job deleted", job: deletedJob });
+  res.status(StatusCodes.OK).json({ msg: "job deleted", job: deletedJob });
 };
