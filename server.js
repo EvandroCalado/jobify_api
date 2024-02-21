@@ -1,6 +1,7 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import "express-async-errors";
+import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
@@ -15,11 +16,15 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // index
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to jobify API!" });
+app.post("/", (req, res) => {
+  res.status(StatusCodes.OK).json({ message: "Welcome Jobify" });
 });
 
 app.use("/api/v1/jobs", jobRouter);
+
+app.use("*", (req, res) => {
+  res.status(404).json({ msg: "Not found" });
+});
 
 app.use(errorHandlerMiddleware);
 
