@@ -4,7 +4,12 @@ import "express-async-errors";
 import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import morgan from "morgan";
+
+// middlewares
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
+
+// routes
+import authRouter from "./routes/authRouter.js";
 import jobRouter from "./routes/jobRouter.js";
 
 dotenv.config();
@@ -21,6 +26,7 @@ app.post("/", (req, res) => {
 });
 
 app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res) => {
   res.status(404).json({ msg: "Not found" });
