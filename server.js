@@ -13,6 +13,7 @@ import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
 // routes
 import authRouter from "./routes/authRouter.js";
 import jobRouter from "./routes/jobRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ app.post("/", (req, res) => {
 });
 
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
+app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res) => {
