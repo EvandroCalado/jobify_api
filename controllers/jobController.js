@@ -1,9 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError } from "../errors/customErrors.js";
 import Job from "../models/jobModel.js";
 
 export const getAllJobs = async (req, res) => {
-  const jobs = await Job.find();
+  const jobs = await Job.find({ createdBy: req.user.userId });
 
   res.status(StatusCodes.OK).json({ jobs });
 };
@@ -15,12 +14,9 @@ export const getOneJob = async (req, res) => {
 };
 
 export const createJob = async (req, res) => {
-  const { company, position } = req.body;
+  req.body.createdBy = req.user.userId;
 
-  if (!company || !position)
-    throw new BadRequestError("please provide company and position");
-
-  const job = await Job.create({ company, position });
+  const job = await Job.create(req.body);
 
   res.status(StatusCodes.OK).json({ job });
 };
