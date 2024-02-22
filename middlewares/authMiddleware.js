@@ -1,7 +1,7 @@
 import { UnauthenticatedError } from "../errors/customErrors.js";
 import { verifyJwt } from "../utils/token.js";
 
-const authenticateUser = async (req, res, next) => {
+const authenticateUser = (req, res, next) => {
   const { jobifyToken } = req.cookies;
 
   if (!jobifyToken) {
