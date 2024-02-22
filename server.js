@@ -1,3 +1,4 @@
+import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 import express from "express";
 import "express-async-errors";
@@ -6,6 +7,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 
 // middlewares
+import authenticateUser from "./middlewares/authMiddleware.js";
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
 
 // routes
@@ -15,6 +17,7 @@ import jobRouter from "./routes/jobRouter.js";
 dotenv.config();
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -25,7 +28,7 @@ app.post("/", (req, res) => {
   res.status(StatusCodes.OK).json({ message: "Welcome Jobify" });
 });
 
-app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res) => {
