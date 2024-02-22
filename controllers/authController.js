@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { UnauthenticatedError } from "../errors/customErrors.js";
 import User from "../models/userModel.js";
 import { comparePassword, hashPassword } from "../utils/password.js";
+import { createJwt } from "../utils/token.js";
 
 export const register = async (req, res) => {
   const isFirstAccount = (await User.countDocuments()) === 0;
@@ -26,5 +27,14 @@ export const login = async (req, res) => {
     throw new UnauthenticatedError("invalid credentials");
   }
 
-  res.send("login");
+  const token = createJwt({ userId: user._id, role: user.role });
+
+  const oneDay = 1000 * 60 * 60 * 24;
+
+  res.cookie("jobifyToken", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === "production",
+  });
+  res.status(StatusCodes.OK).json({ msg: "user logged in" });
 };
