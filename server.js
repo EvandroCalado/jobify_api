@@ -2,9 +2,11 @@ import cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 import express from "express";
 import "express-async-errors";
-import { StatusCodes } from "http-status-codes";
+import fs from "fs";
 import mongoose from "mongoose";
 import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+import YAML from "yaml";
 
 // middlewares
 import authenticateUser from "./middlewares/authMiddleware.js";
@@ -24,10 +26,10 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-// index
-app.post("/", (req, res) => {
-  res.status(StatusCodes.OK).json({ message: "Welcome Jobify" });
-});
+// swagger
+const swagger = fs.readFileSync("./swagger.yaml", "utf8");
+const swaggerDocument = YAML.parse(swagger);
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/v1/jobs", authenticateUser, jobRouter);
 app.use("/api/v1/users", authenticateUser, userRouter);

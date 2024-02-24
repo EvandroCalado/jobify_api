@@ -22,15 +22,15 @@ export const createJob = async (req, res) => {
 };
 
 export const updateJob = async (req, res) => {
-  const updatedJob = await Job.findByIdAndUpdate(req.params.id, req.body, {
+  await Job.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
   });
 
-  res.status(StatusCodes.OK).json({ msg: "job updated", job: updatedJob });
+  res.status(StatusCodes.OK).json({ msg: "job updated" });
 };
 
 export const deleteJob = async (req, res) => {
-  const deletedJob = await Job.findByIdAndDelete(req.params.id);
+  await Job.findByIdAndDelete(req.params.id);
 
-  res.status(StatusCodes.OK).json({ msg: "job deleted", job: deletedJob });
+  res.status(StatusCodes.OK).json({ msg: "job deleted" });
 };

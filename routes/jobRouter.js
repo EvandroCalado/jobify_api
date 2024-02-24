@@ -16,7 +16,7 @@ import {
 router.get("/", getAllJobs);
 router.get("/:id", validateIdParam, getOneJob);
 router.post("/", validateJobInput, createJob);
-router.patch("/:id", validateJobInput, validateIdParam, updateJob);
-router.delete("/:id", validateIdParam, deleteJob);
+router.patch("/update/:id", validateJobInput, validateIdParam, updateJob);
+router.delete("/delete/:id", validateIdParam, deleteJob);
 
 export default router;

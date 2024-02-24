@@ -1,0 +1,450 @@
+openapi: 3.0.0
+
+info:
+  title: Jobify API
+  description: A comprehensive job search API offering a range of endpoints and extensive routes for seamless querying. Ensure a smooth user experience by registering and logging in to access the full spectrum of features..
+  contact:
+    name: Evandro Calado
+    email: evandrocalado07@gmail.com
+  version: 1.0.0
+
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: Create a new user
+      description: Endpoint dedicated to the creation of a new user, facilitating the user registration process.
+      tags: ["Auth"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            examples:
+              User:
+                value:
+                  name: John
+                  lastName: Doe
+                  email: john@gmail.com
+                  password: "12345678"
+                  location: my city
+      responses:
+        201:
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: user created
+        400:
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: email already exists
+  /api/v1/auth/login:
+    post:
+      summary: Login a user
+      description: Endpoint dedicated to user authentication, facilitating the logging-in process and configuring the token, which is then securely stored in cookies for enhanced user session management.
+      tags: ["Auth"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Login"
+            examples:
+              Users:
+                value:
+                  email: john@gmail.com
+                  password: "12345678"
+      responses:
+        200:
+          description: created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: user logged in
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: invalid credentials
+  /api/v1/auth/logout:
+    get:
+      summary: Logout a user
+      description: Endpoint designed to facilitate user logout by expiring the associated token, ensuring enhanced security measures.
+      tags: ["Auth"]
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: user logged out
+
+  /api/v1/users/current-user:
+    get:
+      summary: Get current user info
+      description: Endpoint dedicated to retrieving current user information.
+      tags: ["Users"]
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                User:
+                  _id: 65d6827d6b8325a9d600f0d0
+                  name: John
+                  lastName: Doe
+                  email: john@gmail.com
+                  location: Pernambuco
+                  role: user
+                  __v: 0
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: authentication invalid
+  /api/v1/users/app-stats:
+    get:
+      summary: Get app stats
+      description: Endpoint designed for retrieving application statistics, exclusively accessible by administrator user.
+      tags: ["Users"]
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                users: number
+                jobs: number
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: authentication invalid
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+              example:
+                msg: unauthorized to access this route
+  /api/v1/users/update-user:
+    patch:
+      summary: Update a user
+      description: Endpoint for updating user information.
+      tags: ["Users"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+            examples:
+              User:
+                value:
+                  name: John
+                  lastName: Doe
+                  email: john@gmail.com
+                  password: "12345678"
+                  location: my city
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                msg: update user
+        400:
+          description: bad request
+          content:
+            application/json:
+              example:
+                msg: email already
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+
+  /api/v1/jobs:
+    get:
+      summary: Get all jobs
+      description: Endpoint for retrieving a comprehensive list of all available job listings.
+      tags: ["Jobs"]
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                jobs:
+                  - _id: 65d73d879394e2e3a1bdef53
+                    company: test
+                    position: front-end
+                    jobStatus: pending
+                    jobType: full-time
+                    jobLocation: city
+                    createdBy: 65d73d2f9394e2e3a1bdef4f
+                    createdAt: 2024-02-22T12:26:47.880Z
+                    updatedAt: 2024-02-22T12:26:47.880Z
+                    __v: 0
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+  /api/v1/jobs/{id}:
+    get:
+      summary: Get a single job
+      description: Endpoint designed to retrieve details of a specific job, accessible exclusively by administrators or the job owner.
+      tags: ["Jobs"]
+      parameters:
+        - in: path
+          name: id
+          description: ID of job,
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                jobs:
+                  _id: 65d73d879394e2e3a1bdef53
+                  company: test
+                  position: front-end
+                  jobStatus: pending
+                  jobType: full-time
+                  jobLocation: city
+                  createdBy: 65d73d2f9394e2e3a1bdef4f
+                  createdAt: 2024-02-22T12:26:47.880Z
+                  updatedAt: 2024-02-22T12:26:47.880Z
+                  __v: 0
+        400:
+          description: bad request
+          content:
+            application/json:
+              example:
+                msg: invalid MongoDB id
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+        404:
+          description: not found
+          content:
+            application/json:
+              example:
+                msg: no job with '65d73d879394e2e3a1bdef5d'
+  /api/v1/jobs/:
+    post:
+      summary: Create a job
+      description: Endpoint to facilitate job creation, allowing users to seamlessly generate new job listings with ease.
+      tags: ["Jobs"]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Job"
+            examples:
+              User:
+                value:
+                  company: Test
+                  position: front-end
+                  jobStatus: pending
+                  jobType: full-time
+                  jobLocation: city
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                jobs:
+                  _id: 65d73d879394e2e3a1bdef53
+                  company: test
+                  position: front-end
+                  jobStatus: pending
+                  jobType: full-time
+                  jobLocation: city
+                  createdBy: 65d73d2f9394e2e3a1bdef4f
+                  createdAt: 2024-02-22T12:26:47.880Z
+                  updatedAt: 2024-02-22T12:26:47.880Z
+                  __v: 0
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+  /api/v1/jobs/update/{id}:
+    patch:
+      summary: Update a job
+      description: Endpoint for updating job details, allowing users to seamlessly modify and enhance job information.
+      tags: ["Jobs"]
+      parameters:
+        - in: path
+          name: id
+          description: ID of job to update,
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Job"
+            examples:
+              User:
+                value:
+                  company: Test
+                  position: front-end
+                  jobStatus: pending
+                  jobType: full-time
+                  jobLocation: city
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                msg: job updated
+        400:
+          description: bad request
+          content:
+            application/json:
+              example:
+                msg: invalid MongoDB id
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+        404:
+          description: not found
+          content:
+            application/json:
+              example:
+                msg: no job with '65d73d879394e2e3a1bdef5d'
+  /api/v1/jobs/delete/{id}:
+    delete:
+      summary: Delete a job
+      description: Endpoint for deleting job details, allowing users to seamlessly modify and enhance job information.
+      tags: ["Jobs"]
+      parameters:
+        - in: path
+          name: id
+          description: ID of job to delete,
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              example:
+                msg: job deleted
+        400:
+          description: bad request
+          content:
+            application/json:
+              example:
+                msg: invalid MongoDB id
+        401:
+          description: unauthorized
+          content:
+            application/json:
+              example:
+                msg: authentication invalid
+        404:
+          description: not found
+          content:
+            application/json:
+              example:
+                msg: no job with '65d73d879394e2e3a1bdef5d'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        location:
+          type: string
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Job:
+      type: object
+      properties:
+        company:
+          type: string
+        position:
+          type: string
+        jobStatus:
+          type: string
+        jobType:
+          type: string
+        jobLocation:
+          type: string
