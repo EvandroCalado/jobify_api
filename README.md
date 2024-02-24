@@ -1,3 +1,5 @@
+![Captura de tela de 2024-02-24 20-29-32](https://github.com/EvandroCalado/jobify_api/assets/110628201/0dbddf17-361d-4e18-baec-4c155ae7c579)
+
 # Jobify API
 
 Bem-vindo ao projeto Jobify API! Esta API oferece funcionalidades robustas para gerenciar usuários e empregos, com endpoints intuitivos e recursos avançados. 
