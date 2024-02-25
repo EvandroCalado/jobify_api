@@ -11,7 +11,7 @@ Bem-vindo ao projeto Jobify API! Esta API oferece funcionalidades robustas para 
 - **POST /api/v1/auth/login**: Realiza o login do usuário, salva o JWT no cookie em modo http-only.
 - **POST /api/v1/auth/logout**: Desloga o usuário e expira o token.
 
-### 🔒 Usuários
+### 🧑 Usuários
 - **GET /api/v1/users/current-user**: Obtém informações do usuário atual.
 - **GET /api/v1/users/app-stats**: Obtém estatísticas dos empregos (apenas para administradores).
 - **PUT /api/v1/users/update-user**: Atualiza as informações do usuário.
